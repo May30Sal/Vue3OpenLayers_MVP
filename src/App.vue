@@ -1,26 +1,49 @@
+<!-- Create the template or what will show on the screen -->
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <div class="cell cell-map">
+      <!-- Use the declared component -->
+      <MapContainer></MapContainer>
+      <button id="zoomtolayer">Zoom to Layer</button> 
+    </div>
+  </div>
 </template>
 
+<!-- Export the component, telling Vue what it is -->
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+//Import the components that will show
+import MapContainer from './components/MapContainer.vue';
+
+//Declare the imported components
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    MapContainer,
+  },
 }
 </script>
 
 <style>
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 100vh;
+  grid-auto-rows: 1fr;
+  grid-gap: 1rem;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.cell-edit {
+  grid-column: 2;
+  grid-row: 1;
 }
 </style>
