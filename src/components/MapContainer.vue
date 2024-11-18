@@ -9,7 +9,7 @@ import { Map, View } from 'ol/index.js'; //Feature
 import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer.js';
 import { useGeographic } from 'ol/proj.js';
 import { OSM, Vector as VectorSource } from 'ol/source.js';
-import {defaults as defaultControls} from 'ol/control.js';
+import {defaults as defaultControls, ZoomToExtent} from 'ol/control.js';
 import MousePosition from 'ol/control/MousePosition.js';
 import {createStringXY} from 'ol/coordinate.js';
 //import { Point } from 'ol/geom.js';
@@ -57,6 +57,13 @@ export default {
         'type': 'Polygon',
         'coordinates': [data],
       },
+    },
+    {
+      'type': 'Feature',
+      'geometry': {
+        'type': 'Point',
+        'coordinates': [-114.06, 51.04],
+      }
     } 
   ]};
 
@@ -75,17 +82,17 @@ export default {
     // }
     })
 
-    // const place = new Point([-109.497, 57.320]);
+    let vectorPoint = new VectorSource({
+      features: new GeoJSON().readFeatures(geojsonObject)
+    })
 
-    // let vectorPoint = new VectorLayer({
-    //     source: new VectorSource({
-    //     features: [new Feature(place)],
-    //   }),
-    //   style: {
-    //     'circle-radius': 6,
-    //     'circle-fill-color': 'blue',
-    //   }
-    // })
+    let vectorLayer2 = new VectorLayer({
+      source: vectorPoint,
+      style: {
+        'circle-radius': 6,
+        'circle-fill-color': 'blue',
+      }
+    })
 
     const mousePositionControl = new MousePosition({
     coordinateFormat: createStringXY(4),
@@ -103,7 +110,11 @@ export default {
     })
 
     let map = new Map({
-      controls: defaultControls().extend([mousePositionControl]),
+      // 
+      controls: defaultControls().extend([
+        mousePositionControl,
+                    new ZoomToExtent({}),
+                ]),
       target: this.$refs["map-root"],
       layers: [
         new TileLayer({
@@ -111,6 +122,7 @@ export default {
           name: "OpenStreetMap",
         }),
         vectorLayer,
+        vectorLayer2
         //vectorPoint
       ],
       view: view,
